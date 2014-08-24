@@ -70,10 +70,7 @@ func RunRedirector(conn *RedisConnection) {
 
 // Get index template from bindata
 func BuildTemplate() *template.Template {
-	index_content, err := Asset("templates/index.html")
-	HandleErr(err)
-
-	html, err := template.New("index.html").Parse(string(index_content))
+	html, err := template.New("index.html").Parse(string(indexTemplate))
 	HandleErr(err)
 
 	return html

@@ -1,3 +1,6 @@
+package main
+
+const indexTemplate string = `
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -204,3 +207,4 @@
         </script>
     </body>
 </html>
+`

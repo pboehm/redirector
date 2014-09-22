@@ -65,14 +65,17 @@ func (self *RedisConnection) GetAndIncrementCount(fqdn string) *Redirection {
 	defer conn.Close()
 
 	redirection := Redirection{}
-	key := generateRedisKey(fqdn)
 
-	data, err := redis.Values(conn.Do("HGETALL", key))
-	HandleErr(err)
-	HandleErr(redis.ScanStruct(data, &redirection))
+	if self.Exist(fqdn) {
+		key := generateRedisKey(fqdn)
 
-	_, err = conn.Do("HINCRBY", key, "count", 1)
-	HandleErr(err)
+		data, err := redis.Values(conn.Do("HGETALL", key))
+		HandleErr(err)
+		HandleErr(redis.ScanStruct(data, &redirection))
+
+		_, err = conn.Do("HINCRBY", key, "count", 1)
+		HandleErr(err)
+	}
 
 	return &redirection
 }

@@ -12,10 +12,12 @@ func HandleErr(err error) {
 }
 
 var (
-	RedirectorFQDN  string
-	WebListenSocket string
-	RedisHost       string
-	Verbose         bool
+	RedirectorFQDN     string
+	WebListenSocket    string
+	RedirectorUser     string
+	RedirectorPassword string
+	RedisHost          string
+	Verbose            bool
 )
 
 func init() {
@@ -25,6 +27,12 @@ func init() {
 	flag.StringVar(&WebListenSocket, "listen", ":8080",
 		"Which socket should the web service use to bind itself")
 
+	flag.StringVar(&RedirectorUser, "username", "",
+		"The username for the admin backend")
+
+	flag.StringVar(&RedirectorPassword, "password", "",
+		"The password for the admin backend")
+
 	flag.StringVar(&RedisHost, "redis", ":6379",
 		"The Redis socket that should be used")
 
@@ -33,6 +41,9 @@ func init() {
 }
 
 func ValidateCommandArgs() {
+	if RedirectorUser == "" || RedirectorPassword == "" {
+		log.Fatal("You have to supply --username=XXX --password=YYY")
+	}
 }
 
 func main() {

@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"html/template"
-	"log"
 	"net"
 	"net/http"
 	"regexp"
@@ -25,8 +24,6 @@ func RunRedirector(conn *RedisConnection) {
 			fqdn, _, _ = net.SplitHostPort(fqdn)
 		}
 
-		log.Printf("FQDN: %s", fqdn)
-
 		redirection := conn.GetAndIncrementCount(fqdn)
 
 		if redirection.To != "" {
@@ -39,7 +36,7 @@ func RunRedirector(conn *RedisConnection) {
 	// Group using gin.BasicAuth() middleware
 	// gin.Accounts is a shortcut for map[string]string
 	authorized := r.Group("/admin", gin.BasicAuth(gin.Accounts{
-		"user": "password",
+		RedirectorUser: RedirectorPassword,
 	}))
 
 	authorized.GET("/index", func(g *gin.Context) {
